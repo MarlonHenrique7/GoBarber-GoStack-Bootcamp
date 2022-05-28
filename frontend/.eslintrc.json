@@ -28,6 +28,12 @@
         //   "allowFunctions":  true,
         //   "allowBind": true
         // }],
+        "@typescript-eslint/no-empty-function": [
+            "error",
+            { "allow": ["arrowFunctions"] }
+        ],
+        "react/jsx-no-constructed-context-values": "off",
+        "react/require-default-props": "off",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
