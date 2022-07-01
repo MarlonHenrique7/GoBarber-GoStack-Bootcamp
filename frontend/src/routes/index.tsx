@@ -5,19 +5,17 @@ import SignUp from '../pages/SignUp';
 import SignIn from '../pages/SignIn';
 import Dashboard from '../pages/Dashboard';
 import PrivateRoute from './Route';
+import RestrictedRoutes from './RouteRedirect';
 
 const RoutesApp: React.FC = () => (
     <Routes>
-        <Route path="/" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route
-            path="/dashboard"
-            element={
-                <PrivateRoute>
-                    <Dashboard />
-                </PrivateRoute>
-            }
-        />
+        <Route element={<RestrictedRoutes />}>
+            <Route path="/" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
     </Routes>
 );
 

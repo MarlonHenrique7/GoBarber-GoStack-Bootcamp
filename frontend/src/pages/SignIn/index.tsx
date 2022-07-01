@@ -1,9 +1,9 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import getValidationErrors from '../../utils/getValidationErros';
 
 import { useAuth } from '../../hooks/AuthContext';
@@ -19,7 +19,6 @@ interface SignInFormData {
     email: string;
     password: string;
 }
-
 const SignIn: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
 
@@ -27,7 +26,16 @@ const SignIn: React.FC = () => {
     const { signIn } = useAuth();
     const { addToast } = useToast();
 
-    // console.log(auth);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const navigatePathname = useMemo(() => {
+        const state = location.state as { from: { pathname: string } };
+        if (state && state.from) {
+            return state.from.pathname;
+        }
+        return '/dashboard';
+    }, [location]);
 
     const handlesubmit = useCallback(
         async (data: SignInFormData) => {
@@ -46,6 +54,7 @@ const SignIn: React.FC = () => {
                     email: data.email,
                     password: data.password,
                 });
+                navigate(navigatePathname, { replace: true });
             } catch (err) {
                 if (err instanceof Yup.ValidationError) {
                     const errors = getValidationErrors(
@@ -61,7 +70,7 @@ const SignIn: React.FC = () => {
                 });
             }
         },
-        [signIn, addToast],
+        [signIn, addToast, navigate, navigatePathname],
     );
 
     return (

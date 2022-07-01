@@ -1,12 +1,24 @@
 import React from 'react';
 
-import { Navigate } from 'react-router-dom';
+import {
+    Navigate,
+    NavigateProps,
+    Outlet,
+    OutletProps,
+    useLocation,
+} from 'react-router-dom';
 
 import { useAuth } from '../hooks/AuthContext';
 
-const PrivateRoute: React.FC<any> = ({ children }) => {
+const PrivateRoute: React.FC<NavigateProps | OutletProps> = () => {
     const { user } = useAuth();
-    return user ? children : <Navigate to="/" />;
+    const location = useLocation();
+
+    return user ? (
+        <Outlet />
+    ) : (
+        <Navigate to="/" state={{ from: location }} replace />
+    );
 };
 
 export default PrivateRoute;
