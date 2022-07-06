@@ -1,8 +1,8 @@
-import {Router} from 'express';
+import { Router } from 'express';
 
-import AuthenticateUserService from '../services/AuthenticateUserService';
+import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
 
-interface deletePassword{
+interface deletePassword {
     id: string;
     name: string;
     email: string;
@@ -15,25 +15,20 @@ interface deletePassword{
 const sessionsRouter = Router();
 
 sessionsRouter.post('/', async (request, response) => {
-
-    const {email, password} = request.body;
+    const { email, password } = request.body;
 
     const authenticateUser = new AuthenticateUserService();
 
-    const {user, token} = await authenticateUser.execute({
+    const { user, token } = await authenticateUser.execute({
         email,
         password,
     });
 
-    const userDeletedPassword:deletePassword = user;
+    const userDeletedPassword: deletePassword = user;
 
     delete userDeletedPassword.password;
 
-    return response.json({ userDeletedPassword, token })
+    return response.json({ userDeletedPassword, token });
 });
 
 export default sessionsRouter;
-
-
-
-
